@@ -146,7 +146,7 @@ strong{font-weight:800}
   --fg:#FFF8F1;--fg-soft:rgba(255,248,241,.9);--accent:#FFF8F1;--line-2:rgba(255,255,255,.5);
   background:
     linear-gradient(170deg, rgba(255,196,46,.74) 0%, rgba(255,128,0,.62) 28%, rgba(255,76,0,.64) 60%, rgba(255,1,56,.74) 100%),
-    url("hero.jpg") center/cover no-repeat;
+    url("assets/hero.jpg") center/cover no-repeat;
 }
 .rays{
   position:absolute;left:50%;bottom:-58vh;width:150vmax;aspect-ratio:1;
@@ -422,7 +422,7 @@ body.hide-chrome .help{opacity:0}
 /* фірмова текстура з логотипу */
 .slide.textured::before{
   content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
-  background:url("pattern.png") repeat;
+  background:url("assets/pattern.png") repeat;
   background-size:min(34vw,380px);
   opacity:.14;
 }
@@ -466,7 +466,31 @@ body.hide-chrome .help{opacity:0}
 .photo .day.on,.pop .day.on{color:var(--ink)}
 .from{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
 
+
+/* якщо картинки лежать не в assets/, а поруч з index.html */
+.flat-assets #hero{
+  background:
+    linear-gradient(170deg, rgba(255,196,46,.74) 0%, rgba(255,128,0,.62) 28%, rgba(255,76,0,.64) 60%, rgba(255,1,56,.74) 100%),
+    url("hero.jpg") center/cover no-repeat;
+}
+.flat-assets .slide.textured::before{background-image:url("pattern.png")}
 </style>
+<script>
+/* Картинки шукаються в assets/. Якщо їх там немає — беремо з кореня. */
+(function(){
+  document.addEventListener('error', function(e){
+    var el = e.target;
+    if(el.tagName !== 'IMG' || el.dataset.fb) return;
+    var src = el.getAttribute('src') || '';
+    if(src.indexOf('assets/') !== 0) return;
+    el.dataset.fb = '1';
+    el.src = src.slice(7);
+  }, true);
+  var probe = new Image();
+  probe.onerror = function(){ document.documentElement.classList.add('flat-assets'); };
+  probe.src = 'assets/hero.jpg';
+})();
+</script>
 </head>
 <body>
 
@@ -480,7 +504,7 @@ body.hide-chrome .help{opacity:0}
   <div class="rays" aria-hidden="true"></div>
   <div class="sun" aria-hidden="true"></div>
   <div class="horizon" aria-hidden="true"></div>
-  <div class="hero-brand"><img class="brand-mark" src="logo-white.png" alt="Тревелон"></div>
+  <div class="hero-brand"><img class="brand-mark" src="assets/logo-white.png" alt="Тревелон"></div>
   <div class="hero-inner">
     <p class="hero-kicker rv">Вмикай подорожі!</p>
     <h1 class="rv">Шпаргалка<span class="yr">2026</span></h1>
@@ -604,14 +628,14 @@ body.hide-chrome .help{opacity:0}
       <p class="lead rv">Більше не потрібно вести переписку поштою і шукати листи серед десятків повідомлень. Створюєте індивідуальний запит у CRM — і вся комунікація відбувається прямо в ньому, так само як у звичайній заявці.</p>
       <p class="rv" style="margin-top:1.6rem"><a class="btn" href="https://travelon.to/book/leads" target="_blank" rel="noopener">Спробувати зараз</a></p>
     </div>
-    <div class="media square rv"><img src="crm-leads.jpg" alt="Індивідуальні запити в CRM" loading="lazy"></div>
+    <div class="media square rv"><img src="assets/crm-leads.jpg" alt="Індивідуальні запити в CRM" loading="lazy"></div>
   </div>
 </section>
 
 <!-- ══════════ 09 · ПАСПОРТИ ══════════ -->
 <section class="slide tint" data-block="Інструменти">
   <div class="wrap split">
-    <div class="media square rv"><img src="passport-scan.jpg" alt="Сканування даних з паспортів туристів" loading="lazy"></div>
+    <div class="media square rv"><img src="assets/passport-scan.jpg" alt="Сканування даних з паспортів туристів" loading="lazy"></div>
     <div>
       <p class="eyebrow rv">Нова функція в кошику туру</p>
       <h2 class="rv">Сканування<br>паспортів</h2>
@@ -627,7 +651,7 @@ body.hide-chrome .help{opacity:0}
     <p class="eyebrow rv">Працюйте швидше, бронюйте вигідніше</p>
     <h2 class="rv">Запит по ціні конкурента</h2>
     <div class="split rv" style="margin-top:.6rem">
-      <div class="media"><img src="competitor-price.jpg" alt="Кнопка «Запит ціни конкурента» в системі" loading="lazy"></div>
+      <div class="media"><img src="assets/competitor-price.jpg" alt="Кнопка «Запит ціни конкурента» в системі" loading="lazy"></div>
       <div>
         <ul class="ul">
           <li><strong>Крок 1.</strong> Підберіть ідеальний тур для туриста та внесіть дані</li>
@@ -646,7 +670,7 @@ body.hide-chrome .help{opacity:0}
     <p class="eyebrow rv">Безкоштовний AI-асистент від Travelon</p>
     <h2 class="rv">ШІ Консьєрж</h2>
     <div class="split rv">
-      <div class="media square"><img src="concierge.jpg" alt="Travelon Concierge" loading="lazy"></div>
+      <div class="media square"><img src="assets/concierge.jpg" alt="Travelon Concierge" loading="lazy"></div>
       <div>
         <p class="lead" style="margin-bottom:1.2rem">Втомились відповідати на типові питання від туристів, які вже на валізах?</p>
         <ul class="ul">
@@ -676,7 +700,7 @@ body.hide-chrome .help{opacity:0}
       </ul>
       <p class="rv" style="margin-top:1.6rem"><a class="btn" href="https://agency.travelon.club/avia" target="_blank" rel="noopener">Перейти на сторінку</a></p>
     </div>
-    <div class="media square rv"><img src="avia-guide.jpg" alt="Довідник мандрівника: багаж, check-in, інфанти" loading="lazy"></div>
+    <div class="media square rv"><img src="assets/avia-guide.jpg" alt="Довідник мандрівника: багаж, check-in, інфанти" loading="lazy"></div>
   </div>
 </section>
 
@@ -686,7 +710,7 @@ body.hide-chrome .help{opacity:0}
     <p class="eyebrow rv">Нагадуємо про важливість підписання</p>
     <h2 class="rv">Агентський договір</h2>
     <div class="split rv">
-      <div class="media wide"><img src="contract.jpg" alt="Агентський договір" loading="lazy"></div>
+      <div class="media wide"><img src="assets/contract.jpg" alt="Агентський договір" loading="lazy"></div>
       <div>
         <ul class="ul">
           <li><strong>1.</strong> Завантажте та заповніть агентський договір за посиланням</li>
@@ -716,12 +740,12 @@ body.hide-chrome .help{opacity:0}
 
 <!-- ══════════ 15 · PREMIUM 24/7 ══════════ -->
 <section class="slide photo" data-block="Premium">
-  <div class="bg" aria-hidden="true"><img src="premium-bg.jpg" alt="" loading="lazy"></div>
+  <div class="bg" aria-hidden="true"><img src="assets/premium-bg.jpg" alt="" loading="lazy"></div>
   <div class="wrap" style="text-align:center;justify-items:center">
     <p class="eyebrow rv" style="justify-content:center">«Travelon Premium»</p>
     <h1 class="rv" style="font-size:clamp(3.4rem,13vw,10rem)">24/7</h1>
     <p class="hero-sub rv" style="text-align:center">На зв'язку — завжди.</p>
-    <div class="qr rv" style="margin-top:2rem"><img src="premium-qr.png" alt="QR: Telegram-канал Travelon Premium" loading="lazy"></div>
+    <div class="qr rv" style="margin-top:2rem"><img src="assets/premium-qr.png" alt="QR: Telegram-канал Travelon Premium" loading="lazy"></div>
   </div>
 </section>
 
@@ -731,13 +755,13 @@ body.hide-chrome .help{opacity:0}
     <p class="eyebrow rv">Вмикай подорожі!</p>
     <h1 class="rv">Дякуємо<br>за увагу</h1>
     <p class="hero-sub rv" style="text-align:center">Приєднуйся до нас!</p>
-    <div class="qr rv" style="width:min(220px,46vw);margin:1.8rem auto 0;background:#fff;padding:1rem"><img src="join-qr.png" alt="QR: приєднуйся до нас"></div>
+    <div class="qr rv" style="width:min(220px,46vw);margin:1.8rem auto 0;background:#fff;padding:1rem"><img src="assets/join-qr.png" alt="QR: приєднуйся до нас"></div>
     <p class="contact rv" style="font-size:clamp(1.3rem,2.8vw,2.2rem);margin-top:1.6rem">+38 (044) 333 44 33 · agent@travelon.to</p>
   </div>
 </section>
 
 <style>
-/* запасний фон, якщо фото ще не покладено в  */
+/* запасний фон, якщо фото ще не покладено в assets/ */
 .slide.photo.nophoto > .bg{background:linear-gradient(150deg,var(--sun),var(--orange) 45%,var(--coral) 80%,var(--red))}
 .slide.photo.nophoto > .bg::after{background:linear-gradient(105deg, rgba(43,10,22,.55) 0%, rgba(43,10,22,.28) 55%, rgba(43,10,22,.1) 100%)}
 .slide.photo.nophoto > .bg::before{
