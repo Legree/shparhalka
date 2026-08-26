@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тревелон — Шпаргалка для турагента</title>
+<meta name="description" content="Шпаргалка для турагента від Тревелон: оновлення сервісу, рейси Wizz Air до Єгипту, CRM, сканування паспортів, AI-консьєрж.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,600;0,6..12,800;0,6..12,1000;1,6..12,800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ============ ТОКЕНИ ============ */
+:root{
+  --sand:#FFF3E6;
+  --peach:#FFE2C8;
+  --white:#FFFFFF;
+  --ink:#2B0A16;
+  --coral:#FF4C00;
+  --red:#FF0138;
+  --orange:#FF8000;
+  --sun:#FFC42E;
+  --sea:#00B4C4;
+
+  /* контекстні (перевизначаються на кольорових секціях) */
+  --bg:var(--sand);
+  --fg:var(--ink);
+  --fg-soft:rgba(43,10,22,.66);
+  --fg-dim:rgba(43,10,22,.45);
+  --line:rgba(43,10,22,.14);
+  --line-2:rgba(43,10,22,.28);
+  --accent:var(--coral);
+  --card:var(--white);
+  --shadow:0 2px 0 rgba(43,10,22,.06), 0 14px 34px -18px rgba(43,10,22,.34);
+
+  --display:"Nunito Sans",system-ui,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",monospace;
+  --pad:6vh 5vw;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html{
+  font-size:clamp(13px, .62vw + .62vh, 24px);
+  scroll-behavior:smooth;
+  background:var(--sand);
+}
+body{
+  font-family:var(--display);
+  color:var(--ink);
+  background:var(--sand);
+  height:100svh;
+  overflow-y:scroll;
+  scroll-snap-type:y mandatory;
+  overscroll-behavior-y:none;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.45;
+}
+body::-webkit-scrollbar{width:0}
+
+/* ============ СЛАЙД ============ */
+.slide{
+  min-height:100svh;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+  display:grid;
+  align-content:center;
+  padding:var(--pad);
+  position:relative;
+  background:var(--bg);
+  color:var(--fg);
+}
+.wrap{width:min(1500px,100%);margin:0 auto}
+
+/* пісочна / персикова / кольорова гама секцій */
+.slide.tint{--bg:var(--peach)}
+.slide.pop{
+  --bg:linear-gradient(150deg,var(--coral),var(--red));
+  --fg:#FFF6EE;
+  --fg-soft:rgba(255,246,238,.84);
+  --fg-dim:rgba(255,246,238,.6);
+  --line:rgba(255,255,255,.28);
+  --line-2:rgba(255,255,255,.5);
+  --accent:var(--sun);
+  --card:rgba(255,255,255,.14);
+  --shadow:none;
+}
+.slide.pop.mango{--bg:linear-gradient(150deg,var(--sun),var(--orange) 55%,var(--coral));--fg:var(--ink);--fg-soft:rgba(43,10,22,.7);--fg-dim:rgba(43,10,22,.5);--line:rgba(43,10,22,.2);--line-2:rgba(43,10,22,.38);--accent:var(--red);--card:rgba(255,255,255,.42)}
+.slide.divider{
+  --bg:linear-gradient(155deg,var(--sun) 0%,var(--orange) 32%,var(--coral) 64%,var(--red) 100%);
+  --fg:#FFF8F1;
+  --fg-soft:rgba(255,248,241,.88);
+  --fg-dim:rgba(255,248,241,.66);
+  --line:rgba(255,255,255,.3);
+  --line-2:rgba(255,255,255,.52);
+  --accent:#FFF8F1;
+  --card:rgba(255,255,255,.16);
+  --shadow:none;
+  text-align:center;
+  justify-items:center;
+}
+
+/* ============ ТИПОГРАФІКА ============ */
+.eyebrow{
+  font-family:var(--mono);
+  font-size:.82rem;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--accent);
+  display:flex;align-items:center;gap:.8em;
+  margin-bottom:1.6rem;
+}
+.eyebrow::before{content:"";width:2.4em;height:3px;background:var(--accent);flex:none;border-radius:2px}
+.divider .eyebrow{justify-content:center}
+h1{
+  font-size:clamp(2.6rem,9.5vw,7.6rem);
+  font-weight:1000;letter-spacing:-.035em;line-height:.92;text-transform:uppercase;
+}
+h2{
+  font-size:clamp(2rem,5.4vw,4.4rem);
+  font-weight:1000;letter-spacing:-.03em;line-height:.98;margin-bottom:.5em;
+}
+h3{font-size:1.5rem;font-weight:800;letter-spacing:-.015em;line-height:1.15}
+.lead{font-size:1.35rem;font-weight:400;color:var(--fg-soft);max-width:44ch;line-height:1.5}
+.hot{color:var(--coral)}
+.pop .hot,.divider .hot{color:var(--sun)}
+.hot-2{color:var(--orange)}
+strong{font-weight:800}
+.note{font-family:var(--mono);font-size:.78rem;color:var(--fg-dim);line-height:1.6}
+
+/* ============ АНІМАЦІЯ ВХОДУ ============ */
+.rv{
+  opacity:0;transform:translateY(26px);
+  transition:opacity .75s cubic-bezier(.2,.75,.25,1) var(--d,0s),
+             transform .75s cubic-bezier(.2,.75,.25,1) var(--d,0s);
+}
+.slide.in .rv{opacity:1;transform:none}
+.rv:nth-child(1){--d:.02s}  .rv:nth-child(2){--d:.10s}
+.rv:nth-child(3){--d:.18s}  .rv:nth-child(4){--d:.26s}
+.rv:nth-child(5){--d:.34s}  .rv:nth-child(6){--d:.42s}
+.rv:nth-child(7){--d:.50s}  .rv:nth-child(8){--d:.58s}
+
+/* ============ HERO ============ */
+#hero{
+  overflow:hidden;align-content:center;justify-items:start;
+  --fg:#FFF8F1;--fg-soft:rgba(255,248,241,.9);--accent:#FFF8F1;--line-2:rgba(255,255,255,.5);
+  background:
+    linear-gradient(170deg, rgba(255,196,46,.74) 0%, rgba(255,128,0,.62) 28%, rgba(255,76,0,.64) 60%, rgba(255,1,56,.74) 100%),
+    url("assets/hero.jpg") center/cover no-repeat;
+}
+.rays{
+  position:absolute;left:50%;bottom:-58vh;width:150vmax;aspect-ratio:1;
+  transform:translateX(-50%);pointer-events:none;opacity:.22;
+  background:repeating-conic-gradient(from 0deg at 50% 50%, #FFF8F1 0deg 5deg, transparent 5deg 15deg);
+  animation:spin 120s linear infinite;
+}
+@keyframes spin{to{transform:translateX(-50%) rotate(360deg)}}
+.sun{
+  position:absolute;left:50%;bottom:-30vh;
+  width:min(74vh,82vw);aspect-ratio:1;transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle at 50% 45%, #FFF3C4 0%, var(--sun) 40%, #FFB020 66%, rgba(255,176,32,0) 71%);
+  opacity:0;
+  animation:sunrise 2.2s cubic-bezier(.16,.8,.3,1) .2s forwards;
+  pointer-events:none;
+}
+@keyframes sunrise{
+  from{transform:translateX(-50%) translateY(26vh) scale(.85);opacity:0}
+  to{transform:translateX(-50%) translateY(0) scale(1);opacity:1}
+}
+.horizon{
+  position:absolute;left:0;right:0;bottom:22vh;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.7) 12%,rgba(255,255,255,.7) 88%,transparent);
+  transform:scaleX(0);animation:hz 1.5s cubic-bezier(.2,.8,.2,1) .9s forwards;
+}
+@keyframes hz{to{transform:scaleX(1)}}
+.hero-inner{position:relative;z-index:2;width:min(1500px,100%);margin:0 auto}
+.hero-kicker{
+  font-family:var(--mono);font-size:.9rem;letter-spacing:.34em;
+  text-transform:uppercase;color:#FFF8F1;margin-bottom:2.2rem;
+  background:rgba(43,10,22,.22);display:inline-block;padding:.55em 1.1em;border-radius:100px;
+}
+h1 .yr{display:block;font-size:1.24em;color:#FFF8F1;text-shadow:0 6px 30px rgba(43,10,22,.25)}
+#hero h1{color:#FFF8F1;text-shadow:0 4px 26px rgba(43,10,22,.18)}
+.hero-sub{margin-top:2rem;font-size:1.5rem;font-weight:600;color:#FFF8F1}
+.hero-brand{
+  position:absolute;top:5vh;left:5vw;z-index:3;
+  font-family:var(--mono);font-size:.82rem;letter-spacing:.28em;
+  text-transform:uppercase;color:#FFF8F1;
+}
+.ticker{
+  position:absolute;left:0;right:0;bottom:0;z-index:3;
+  border-top:2px solid rgba(255,255,255,.45);
+  background:rgba(43,10,22,.2);backdrop-filter:blur(6px);
+  overflow:hidden;padding:.9rem 0;
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+}
+.ticker-track{
+  display:flex;gap:2.6rem;width:max-content;animation:roll 44s linear infinite;
+  font-family:var(--mono);font-size:.85rem;letter-spacing:.2em;
+  text-transform:uppercase;color:#FFF8F1;white-space:nowrap;
+}
+.ticker-track span::after{content:"°0";margin-left:2.6rem;color:var(--sun)}
+@keyframes roll{to{transform:translateX(-50%)}}
+
+/* ============ ТАБЛО ВИЛЬОТІВ (сигнатура) ============ */
+.board{
+  border-radius:10px;overflow:hidden;background:var(--card);box-shadow:var(--shadow);
+  border:1px solid var(--line);
+}
+.board-head,.board-row{
+  display:grid;grid-template-columns:1.5fr 1fr auto;gap:1.4rem;align-items:center;padding:.72rem 1.3rem;
+}
+.board-head{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;
+  color:#FFF6EE;background:linear-gradient(90deg,var(--coral),var(--red));
+}
+.pop .board-head,.divider .board-head{background:rgba(43,10,22,.28)}
+.board-row{
+  border-top:1px solid var(--line);transform-origin:top center;opacity:0;animation-fill-mode:forwards;
+}
+.slide.in .board-row{animation:flap .5s cubic-bezier(.3,1.3,.4,1) forwards;animation-delay:var(--fd,0s)}
+@keyframes flap{
+  0%{opacity:0;transform:rotateX(-92deg)}
+  60%{opacity:1;transform:rotateX(8deg)}
+  100%{opacity:1;transform:rotateX(0)}
+}
+.board-row .city{font-weight:800;font-size:1.22rem;text-transform:uppercase;color:var(--fg)}
+.board-row .meta{font-family:var(--mono);font-size:.82rem;color:var(--fg-soft);letter-spacing:.06em}
+.tag{
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;
+  padding:.36em .85em;border-radius:100px;white-space:nowrap;font-weight:500;
+  border:2px solid var(--coral);color:var(--coral);
+}
+.tag.solid{background:var(--coral);color:#FFF6EE;border-color:var(--coral)}
+.tag.warm{border-color:var(--orange);color:var(--orange);background:rgba(255,128,0,.12)}
+.pop .tag,.divider .tag{border-color:var(--fg);color:var(--fg);background:transparent}
+.pop .tag.solid,.divider .tag.solid{background:var(--fg);color:var(--coral)}
+.pop .tag.warm,.divider .tag.warm{border-color:var(--fg);color:var(--fg);background:rgba(255,255,255,.18)}
+.board-foot{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.2rem}
+
+/* ============ СІТКИ ============ */
+.split{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:4vw;align-items:center}
+.split.narrow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.1rem}
+.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.1rem}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.1rem}
+
+.card{
+  border-radius:10px;padding:1.5rem;background:var(--card);
+  box-shadow:var(--shadow);border:1px solid var(--line);
+  border-top:4px solid var(--accent);
+}
+.card .k{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:.9rem;display:block;font-weight:600;
+}
+.pop .card .k,.divider .card .k{color:var(--fg)}
+.card p{font-size:1rem;color:var(--fg-soft);font-weight:400;line-height:1.55}
+.card h3{margin-bottom:.5rem;color:var(--fg)}
+
+/* чипи напрямків */
+.chips{display:flex;flex-wrap:wrap;gap:.7rem}
+.chip{
+  border:2px solid var(--line-2);border-radius:100px;padding:.5em 1.15em;
+  font-weight:800;font-size:1.05rem;background:var(--card);
+}
+.chip.on{border-color:var(--coral);color:var(--coral)}
+.chip.solid{background:var(--coral);border-color:var(--coral);color:#FFF6EE}
+.pop .chip,.divider .chip{background:rgba(255,255,255,.16);border-color:var(--line-2);color:var(--fg)}
+.pop .chip.on,.divider .chip.on{background:rgba(255,255,255,.3);color:var(--fg);border-color:var(--fg)}
+.pop .chip.solid,.divider .chip.solid{background:var(--fg);color:var(--coral);border-color:var(--fg)}
+
+/* готелі */
+.hotels{columns:3;column-gap:2.6rem}
+.hotels li{
+  list-style:none;break-inside:avoid;font-size:1.02rem;font-weight:700;
+  padding:.5rem 0 .5rem 1.6rem;border-bottom:1px solid var(--line);position:relative;color:var(--fg);
+}
+.hotels li::before{
+  content:"";position:absolute;left:0;top:1.05em;width:.55rem;height:.55rem;border-radius:50%;
+  background:var(--accent);
+}
+
+/* марковані списки */
+.ul{list-style:none;display:grid;gap:.62rem}
+.ul li{position:relative;padding-left:1.9rem;font-size:1.1rem;font-weight:500;color:var(--fg)}
+.ul li::before{
+  content:"";position:absolute;left:0;top:.42em;width:.85rem;height:.85rem;border-radius:3px;
+  background:var(--accent);transform:rotate(45deg);
+}
+
+/* таблиці */
+table{width:100%;border-collapse:collapse;font-size:1rem;background:var(--card);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{text-align:left;padding:.85rem 1.1rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+  color:#FFF6EE;font-weight:600;background:linear-gradient(90deg,var(--coral),var(--red));
+}
+.pop th,.divider th{background:rgba(43,10,22,.28)}
+td{color:var(--fg)}
+td:first-child{font-weight:800}
+td.num{font-family:var(--mono);font-weight:500;color:var(--fg-soft)}
+td.num.hot{color:var(--coral);font-weight:700}
+.pop td.num.hot,.divider td.num.hot{color:var(--fg);font-weight:700}
+tbody tr{opacity:0;transform:translateY(14px);transition:.55s cubic-bezier(.2,.8,.2,1) var(--d,0s)}
+.slide.in tbody tr{opacity:1;transform:none}
+tbody tr:nth-child(even){background:rgba(43,10,22,.035)}
+
+/* лояльність */
+.tiers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.1rem;align-items:stretch}
+.tier{
+  border-radius:10px;padding:1.7rem 1.4rem;display:flex;flex-direction:column;gap:.7rem;
+  background:var(--card);box-shadow:var(--shadow);border:1px solid var(--line);border-top:4px solid var(--orange);
+}
+.tier:last-child{border-top-color:var(--red);background:linear-gradient(160deg,#FFFFFF,#FFE2C8)}
+.tier .pct{
+  font-size:3.6rem;font-weight:1000;letter-spacing:-.045em;line-height:.9;
+  background:linear-gradient(100deg,var(--orange),var(--red));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.tier .nm{font-size:1.25rem;font-weight:800;color:var(--ink)}
+.tier .cond{font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--coral)}
+.tier .txt{font-size:.95rem;color:rgba(43,10,22,.66);font-weight:400;line-height:1.5}
+
+/* великі цифри */
+.stat{display:flex;align-items:baseline;gap:.6rem}
+.stat .v{font-size:3.2rem;font-weight:1000;letter-spacing:-.04em;color:var(--coral);line-height:1}
+.pop .stat .v,.divider .stat .v{color:var(--fg)}
+.stat .l{font-family:var(--mono);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--fg-soft)}
+
+/* контакт-блок */
+.contact{
+  font-size:clamp(1.8rem,4.4vw,3.6rem);font-weight:1000;letter-spacing:-.03em;
+  color:var(--coral);word-break:break-word;
+}
+.pop .contact,.divider .contact{color:var(--fg)}
+
+/* «серіал» */
+.filmstrip{display:flex;gap:.5rem;margin-bottom:1.6rem}
+.filmstrip i{width:2.6rem;height:1.7rem;border-radius:3px;border:2px solid var(--line-2);display:block}
+.filmstrip i:nth-child(odd){background:rgba(255,255,255,.4)}
+
+/* ============ ХРОМ ПРЕЗЕНТАЦІЇ ============ */
+.rail{position:fixed;right:1.6vw;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;gap:6px}
+.rail b{
+  display:block;width:3px;height:14px;border-radius:3px;background:rgba(43,10,22,.22);
+  transition:background .3s,height .3s;cursor:pointer;border:0;padding:0;
+  mix-blend-mode:multiply;
+}
+.rail b.on{background:var(--red);height:26px}
+.counter{
+  position:fixed;left:5vw;bottom:3.2vh;z-index:60;font-family:var(--mono);font-size:.74rem;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(43,10,22,.5);display:flex;gap:1.1rem;align-items:center;
+  mix-blend-mode:multiply;
+}
+.counter .blk{color:var(--red);font-weight:600}
+.progress{position:fixed;left:0;top:0;height:4px;z-index:70;background:linear-gradient(90deg,var(--sun),var(--coral),var(--red));width:0%;transition:width .25s linear}
+.help{
+  position:fixed;right:5vw;bottom:3.2vh;z-index:60;font-family:var(--mono);font-size:.72rem;
+  letter-spacing:.14em;color:rgba(43,10,22,.5);text-transform:uppercase;transition:opacity .5s;mix-blend-mode:multiply;
+}
+.help kbd{border:1px solid rgba(43,10,22,.3);border-radius:4px;padding:.1em .45em;font-family:var(--mono);margin:0 .15em}
+body.hide-chrome .help{opacity:0}
+
+/* ============ ДОСТУПНІСТЬ / АДАПТИВ ============ */
+:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+
+@media (max-width:1100px){
+  .split,.split.narrow{grid-template-columns:1fr;gap:2.2rem}
+  .grid-4,.tiers{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hotels{columns:2}
+}
+@media (max-width:700px){
+  :root{--pad:8vh 6vw}
+  .grid-3,.grid-4,.grid-2,.tiers{grid-template-columns:1fr}
+  .hotels{columns:1}
+  .board-head,.board-row{grid-template-columns:1fr auto;gap:.7rem}
+  .board-row .meta{grid-column:1/-1}
+  .rail,.help{display:none}
+  table{font-size:.85rem}
+  th,td{padding:.6rem .5rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+  .rv,tbody tr{opacity:1;transform:none}
+  .board-row{opacity:1}
+}
+
+/* ============ МЕДІА (фото зі слайдів) ============ */
+.media{
+  position:relative;border-radius:12px;overflow:hidden;
+  box-shadow:0 2px 0 rgba(43,10,22,.06), 0 20px 46px -22px rgba(43,10,22,.42);
+  background:linear-gradient(150deg,var(--sun),var(--orange) 55%,var(--coral));
+  aspect-ratio:4/3;
+}
+.media.wide{aspect-ratio:16/9}
+.media.tall{aspect-ratio:3/4}
+.media img{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:2}
+.media.missing img{display:none}
+.media.missing::after{
+  content:attr(data-label);position:absolute;inset:0;z-index:3;
+  display:grid;place-items:center;text-align:center;padding:1.4rem;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(43,10,22,.62);
+}
+.media.missing::before{
+  content:"";position:absolute;inset:0;z-index:1;
+  background:repeating-linear-gradient(45deg, rgba(255,255,255,.16) 0 14px, transparent 14px 28px);
+}
+
+/* фото як тло секції */
+.slide.photo{--fg:#FFF8F1;--fg-soft:rgba(255,248,241,.9);--fg-dim:rgba(255,248,241,.7);--accent:var(--sun);--line:rgba(255,255,255,.3);--line-2:rgba(255,255,255,.5);--card:rgba(43,10,22,.42);--shadow:none;overflow:hidden}
+.slide.photo > .bg{position:absolute;inset:0;z-index:0}
+.slide.photo > .bg img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.06);animation:drift 22s ease-in-out infinite alternate}
+@keyframes drift{to{transform:scale(1.14) translate3d(-1.5%,-1%,0)}}
+.slide.photo > .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg, rgba(43,10,22,.86) 0%, rgba(43,10,22,.62) 46%, rgba(255,76,0,.34) 100%)}
+.slide.photo > .wrap{position:relative;z-index:2}
+.slide.photo .card{backdrop-filter:blur(6px);border-top-color:var(--sun)}
+
+/* фірмова текстура з логотипу */
+.slide.textured::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:url("assets/pattern.png") repeat;
+  background-size:min(34vw,380px);
+  opacity:.14;
+}
+.slide.textured > .wrap{position:relative;z-index:1}
+
+.media.square{aspect-ratio:1/1}
+.media.free{aspect-ratio:auto;background:transparent;box-shadow:none}
+.media.free img{height:auto}
+
+/* QR-картка */
+.qr{
+  width:min(300px,60vw);border-radius:16px;overflow:hidden;
+  box-shadow:0 20px 50px -20px rgba(43,10,22,.6);
+}
+.qr img{width:100%;height:auto;display:block}
+
+.brand-mark{height:1.9rem;width:auto;display:block}
+
+/* кнопка-посилання */
+.btn{
+  display:inline-flex;align-items:center;gap:.6em;
+  background:var(--coral);color:#FFF6EE;text-decoration:none;
+  font-weight:800;font-size:1.05rem;letter-spacing:-.01em;
+  padding:.72em 1.4em;border-radius:100px;
+  box-shadow:0 10px 24px -12px rgba(255,1,56,.8);
+  transition:transform .2s, box-shadow .2s, background .2s;
+}
+.btn:hover{transform:translateY(-2px);background:var(--red);box-shadow:0 14px 28px -12px rgba(255,1,56,.9)}
+.btn::after{content:"\2192";font-family:var(--mono)}
+.pop .btn,.divider .btn,.photo .btn{background:#FFF6EE;color:var(--coral);box-shadow:0 10px 24px -12px rgba(43,10,22,.6)}
+.pop .btn:hover,.divider .btn:hover,.photo .btn:hover{background:#fff;color:var(--red)}
+
+/* розклад рейсів */
+.days{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.7rem}
+.day{
+  font-family:var(--mono);font-size:.78rem;font-weight:600;
+  width:2.4em;height:2.4em;display:grid;place-items:center;border-radius:50%;
+  border:2px solid var(--line-2);color:var(--fg-dim);
+}
+.day.on{background:var(--accent);border-color:var(--accent);color:var(--ink)}
+.photo .day.on,.pop .day.on{color:var(--ink)}
+.from{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<nav class="rail" id="rail" aria-label="Навігація по секціях"></nav>
+<div class="counter"><span class="blk" id="blockName">Старт</span><span id="num">01 / 01</span></div>
+<div class="help"><kbd>&larr;</kbd><kbd>&rarr;</kbd> слайди<span style="margin:0 .6em"></span><kbd>F</kbd> на весь екран</div>
+
+<!-- ══════════ 01 · HERO ══════════ -->
+<section class="slide" id="hero" data-block="Старт">
+  <div class="rays" aria-hidden="true"></div>
+  <div class="sun" aria-hidden="true"></div>
+  <div class="horizon" aria-hidden="true"></div>
+  <div class="hero-brand"><img class="brand-mark" src="assets/logo-white.png" alt="Тревелон"></div>
+  <div class="hero-inner">
+    <p class="hero-kicker rv">Вмикай подорожі!</p>
+    <h1 class="rv">Шпаргалка<span class="yr">2026</span></h1>
+    <p class="hero-sub rv">Усе, що агенту треба знати про сервіс — на одному екрані.</p>
+  </div>
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" id="tick"></div>
+  </div>
+</section>
+
+<!-- ══════════ 02 · ЗМІНИ ТА ОНОВЛЕННЯ ══════════ -->
+<section class="slide" data-block="Оновлення">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow rv">Що нового в сервісі</p>
+      <h2 class="rv">Зміни<br>та оновлення</h2>
+      <p class="lead rv">…та ще багато цікавого попереду.</p>
+    </div>
+    <ul class="ul rv">
+      <li>Новий чат і система коментарів</li>
+      <li>Оновлений інтерфейс пошуку квитків</li>
+      <li>Запит за ціною конкурента — без листів на пошту</li>
+      <li>CRM з туристами</li>
+      <li>Програма лояльності для туристів</li>
+      <li>Розпізнавання фото паспортів</li>
+      <li>Оновлені інтерфейси бронювання та заявки</li>
+      <li>Покращена якість перебування на сайті</li>
+      <li>Консьєрж-сервіс</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════ 03 · РОЗДІЛЮВАЧ WIZZ ══════════ -->
+<section class="slide divider" data-block="Рейси до Єгипту">
+  <div class="wrap">
+    <p class="eyebrow rv">Зимовий сезон</p>
+    <h1 class="rv" style="font-size:clamp(2rem,6.2vw,5rem)">Wizz Air запускає<br>рейси до Єгипту</h1>
+    <p class="lead rv" style="margin:1.6rem auto 0;text-align:center">Хургада · Шарм-ель-Шейх · Марса-Алам — додаткові рейси з Польщі.</p>
+  </div>
+</section>
+
+<!-- ══════════ 04 · ХУРГАДА ══════════ -->
+<section class="slide pop textured" data-block="Рейси до Єгипту">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow rv">Єгипет · додаткові рейси</p>
+      <h2 class="rv">Хургада</h2>
+      <div class="board-foot rv"><span class="tag solid">Вже в пошуку GDS-турів</span></div>
+    </div>
+    <div class="grid-2 rv">
+      <div class="card">
+        <span class="k">Виліт</span>
+        <h3>Катовіце</h3>
+        <p class="from">з 26.10</p>
+        <div class="days"><i class="day on">Пн</i><i class="day on">Вт</i><i class="day">Ср</i><i class="day">Чт</i><i class="day on">Пт</i><i class="day on">Сб</i><i class="day">Нд</i></div>
+      </div>
+      <div class="card">
+        <span class="k">Виліт</span>
+        <h3>Варшава<br>(Модлін)</h3>
+        <p class="from">з 27.10</p>
+        <div class="days"><i class="day">Пн</i><i class="day on">Вт</i><i class="day">Ср</i><i class="day on">Чт</i><i class="day">Пт</i><i class="day">Сб</i><i class="day on">Нд</i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 05 · ШАРМ ══════════ -->
+<section class="slide pop mango textured" data-block="Рейси до Єгипту">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow rv">Єгипет · додаткові рейси</p>
+      <h2 class="rv">Шарм-<br>ель-Шейх</h2>
+      <div class="board-foot rv"><span class="tag solid">Вже в пошуку GDS-турів</span></div>
+    </div>
+    <div class="grid-2 rv">
+      <div class="card">
+        <span class="k">Виліт</span>
+        <h3>Катовіце</h3>
+        <p class="from">з 25.10</p>
+        <div class="days"><i class="day">Пн</i><i class="day on">Вт</i><i class="day">Ср</i><i class="day on">Чт</i><i class="day">Пт</i><i class="day on">Сб</i><i class="day on">Нд</i></div>
+      </div>
+      <div class="card">
+        <span class="k">Виліт</span>
+        <h3>Варшава<br>(Модлін)</h3>
+        <p class="from">з 27.10</p>
+        <div class="days"><i class="day">Пн</i><i class="day on">Вт</i><i class="day">Ср</i><i class="day on">Чт</i><i class="day">Пт</i><i class="day on">Сб</i><i class="day">Нд</i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 06 · МАРСА-АЛАМ ══════════ -->
+<section class="slide pop textured" data-block="Рейси до Єгипту">
+  <div class="wrap">
+    <p class="eyebrow rv">Єгипет · додаткові рейси</p>
+    <h2 class="rv">Марса-Алам</h2>
+    <div class="grid-3 rv">
+      <div class="card">
+        <span class="k">Виліт</span><h3>Катовіце</h3><p class="from">з 26.10</p>
+        <div class="days"><i class="day on">Пн</i><i class="day">Вт</i><i class="day on">Ср</i><i class="day">Чт</i><i class="day on">Пт</i><i class="day">Сб</i><i class="day">Нд</i></div>
+      </div>
+      <div class="card">
+        <span class="k">Виліт</span><h3>Варшава (Модлін)</h3><p class="from">з 26.10</p>
+        <div class="days"><i class="day on">Пн</i><i class="day">Вт</i><i class="day on">Ср</i><i class="day">Чт</i><i class="day">Пт</i><i class="day on">Сб</i><i class="day">Нд</i></div>
+      </div>
+      <div class="card">
+        <span class="k">Виліт</span><h3>Краків</h3><p class="from">з 03.11</p>
+        <div class="days"><i class="day">Пн</i><i class="day on">Вт</i><i class="day on">Ср</i><i class="day on">Чт</i><i class="day">Пт</i><i class="day">Сб</i><i class="day">Нд</i></div>
+      </div>
+    </div>
+    <div class="board-foot rv"><span class="tag warm">З'явиться в пошуку найближчим часом</span></div>
+  </div>
+</section>
+
+<!-- ══════════ 08 · CRM ЗАПИТИ ══════════ -->
+<section class="slide" data-block="Інструменти">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow rv">Індивідуальні запити</p>
+      <h2 class="rv" style="font-size:clamp(1.7rem,3.8vw,3.2rem)">Індивідуальні запити не виходячи з CRM</h2>
+      <p class="lead rv">Більше не потрібно вести переписку поштою і шукати листи серед десятків повідомлень. Створюєте індивідуальний запит у CRM — і вся комунікація відбувається прямо в ньому, так само як у звичайній заявці.</p>
+      <p class="rv" style="margin-top:1.6rem"><a class="btn" href="https://travelon.to/book/leads" target="_blank" rel="noopener">Спробувати зараз</a></p>
+    </div>
+    <div class="media square rv"><img src="assets/crm-leads.jpg" alt="Індивідуальні запити в CRM" loading="lazy"></div>
+  </div>
+</section>
+
+<!-- ══════════ 09 · ПАСПОРТИ ══════════ -->
+<section class="slide tint" data-block="Інструменти">
+  <div class="wrap split">
+    <div class="media square rv"><img src="assets/passport-scan.jpg" alt="Сканування даних з паспортів туристів" loading="lazy"></div>
+    <div>
+      <p class="eyebrow rv">Нова функція в кошику туру</p>
+      <h2 class="rv">Сканування<br>паспортів</h2>
+      <p class="lead rv">Завантажте фото паспорта (JPEG, PDF, HEIC) — система автоматично зчитає дані. Залишається додати ІПН і перевірити. Один турист — один файл.</p>
+      <p class="rv" style="margin-top:1.6rem"><a class="btn" href="https://www.youtube.com/watch?v=UrJTIkuN3-4" target="_blank" rel="noopener">Відеоогляд функції</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 10 · ЦІНА КОНКУРЕНТА ══════════ -->
+<section class="slide" data-block="Інструменти">
+  <div class="wrap">
+    <p class="eyebrow rv">Працюйте швидше, бронюйте вигідніше</p>
+    <h2 class="rv">Запит по ціні конкурента</h2>
+    <div class="split rv" style="margin-top:.6rem">
+      <div class="media"><img src="assets/competitor-price.jpg" alt="Кнопка «Запит ціни конкурента» в системі" loading="lazy"></div>
+      <div>
+        <ul class="ul">
+          <li><strong>Крок 1.</strong> Підберіть ідеальний тур для туриста та внесіть дані</li>
+          <li><strong>Крок 2.</strong> Знайдіть магічну кнопку «Запит ціни конкурента» прямо в системі та натисніть її</li>
+          <li><strong>Крок 3.</strong> Додайте у повідомлення до заявки скріншот з ціною конкурента — обов'язково після перерахунку з комісією</li>
+        </ul>
+        <p style="margin-top:1.6rem"><a class="btn" href="https://t.me/travelon_pro/1586" target="_blank" rel="noopener">Детальніше</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 11 · ШІ КОНСЬЄРЖ ══════════ -->
+<section class="slide pop" data-block="Інструменти">
+  <div class="wrap">
+    <p class="eyebrow rv">Безкоштовний AI-асистент від Travelon</p>
+    <h2 class="rv">ШІ Консьєрж</h2>
+    <div class="split rv">
+      <div class="media square"><img src="assets/concierge.jpg" alt="Travelon Concierge" loading="lazy"></div>
+      <div>
+        <p class="lead" style="margin-bottom:1.2rem">Втомились відповідати на типові питання від туристів, які вже на валізах?</p>
+        <ul class="ul">
+          <li>98% найпоширеніших запитань від ваших туристів</li>
+          <li>Надішле документи по туру</li>
+          <li>Підкаже, як швидше дістатись аеропорту</li>
+          <li>Пояснить, як діяти у страховому випадку</li>
+        </ul>
+        <p style="margin-top:1.6rem"><a class="btn" href="https://t.me/travelon_concierge_bot" target="_blank" rel="noopener">Почати діалог</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 12 · ДОВІДНИК МАНДРІВНИКА ══════════ -->
+<section class="slide tint" data-block="Інструменти">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow rv">Шпаргалка по авіаперельотах</p>
+      <h2 class="rv">Довідник<br>мандрівника</h2>
+      <p class="lead rv">Щоб не шукати інформацію на десятках сайтів авіакомпаній — ми зібрали все в одному місці.</p>
+      <ul class="ul rv" style="margin-top:1.4rem">
+        <li>Норми ручної поклажі та зареєстрованого багажу</li>
+        <li>Правила онлайн check-in</li>
+        <li>Умови перельоту немовлят</li>
+        <li>Допустимі габарити багажу</li>
+      </ul>
+      <p class="rv" style="margin-top:1.6rem"><a class="btn" href="https://agency.travelon.club/avia" target="_blank" rel="noopener">Перейти на сторінку</a></p>
+    </div>
+    <div class="media square rv"><img src="assets/avia-guide.jpg" alt="Довідник мандрівника: багаж, check-in, інфанти" loading="lazy"></div>
+  </div>
+</section>
+
+<!-- ══════════ 13 · ДОГОВІР ══════════ -->
+<section class="slide" data-block="Документи">
+  <div class="wrap">
+    <p class="eyebrow rv">Нагадуємо про важливість підписання</p>
+    <h2 class="rv">Агентський договір</h2>
+    <div class="split rv">
+      <div class="media wide"><img src="assets/contract.jpg" alt="Агентський договір" loading="lazy"></div>
+      <div>
+        <ul class="ul">
+          <li><strong>1.</strong> Завантажте та заповніть агентський договір за посиланням</li>
+          <li><strong>2.</strong> Знайдіть скан-копію банківської гарантії</li>
+          <li><strong>3.</strong> Надішліть договір у форматі Word і скан гарантії на <strong>agent@travelon.to</strong></li>
+        </ul>
+        <p class="note" style="margin-top:1.2rem">Після цього очікуйте договір до підписання у «Вчасно».</p>
+        <p style="margin-top:1.6rem"><a class="btn" href="https://bit.ly/4cqRp38" target="_blank" rel="noopener">Завантажити договір</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 14 · НА ЗВ'ЯЗКУ ══════════ -->
+<section class="slide" data-block="Контакти">
+  <div class="wrap">
+    <p class="eyebrow rv">На зв'язку</p>
+    <h2 class="rv">Коли ми працюємо</h2>
+    <div class="grid-3 rv" style="margin-top:1.6rem">
+      <div class="card"><span class="k">Колцентр</span><h3>Пн–Пт 10:00–19:00</h3><p>Сб 10:00–16:00</p></div>
+      <div class="card"><span class="k">Опрацювання заявок</span><h3>Пн–Пт 10:00–20:00</h3><p>Сб 10:00–17:00</p></div>
+      <div class="card" style="border-top-color:var(--red)"><span class="k">Екстрений зв'язок</span><h3>24 / 7</h3><p>Завжди, коли турист уже в дорозі.</p></div>
+    </div>
+    <p class="contact rv" style="margin-top:2rem"><a href="tel:+380443334433" style="color:inherit;text-decoration:none">+38 (044) 333 44 33</a></p>
+  </div>
+</section>
+
+<!-- ══════════ 15 · PREMIUM 24/7 ══════════ -->
+<section class="slide photo" data-block="Premium">
+  <div class="bg" aria-hidden="true"><img src="assets/premium-bg.jpg" alt="" loading="lazy"></div>
+  <div class="wrap" style="text-align:center;justify-items:center">
+    <p class="eyebrow rv" style="justify-content:center">«Travelon Premium»</p>
+    <h1 class="rv" style="font-size:clamp(3.4rem,13vw,10rem)">24/7</h1>
+    <p class="hero-sub rv" style="text-align:center">На зв'язку — завжди.</p>
+    <div class="qr rv" style="margin-top:2rem"><img src="assets/premium-qr.png" alt="QR: Telegram-канал Travelon Premium" loading="lazy"></div>
+  </div>
+</section>
+
+<!-- ══════════ 16 · ФІНАЛ ══════════ -->
+<section class="slide divider" id="outro" data-block="Фінал">
+  <div class="wrap">
+    <p class="eyebrow rv">Вмикай подорожі!</p>
+    <h1 class="rv">Дякуємо<br>за увагу</h1>
+    <p class="hero-sub rv" style="text-align:center">Приєднуйся до нас!</p>
+    <div class="qr rv" style="width:min(220px,46vw);margin:1.8rem auto 0;background:#fff;padding:1rem"><img src="assets/join-qr.png" alt="QR: приєднуйся до нас"></div>
+    <p class="contact rv" style="font-size:clamp(1.3rem,2.8vw,2.2rem);margin-top:1.6rem">+38 (044) 333 44 33 · agent@travelon.to</p>
+  </div>
+</section>
+
+<style>
+/* запасний фон, якщо фото ще не покладено в assets/ */
+.slide.photo.nophoto > .bg{background:linear-gradient(150deg,var(--sun),var(--orange) 45%,var(--coral) 80%,var(--red))}
+.slide.photo.nophoto > .bg::after{background:linear-gradient(105deg, rgba(43,10,22,.55) 0%, rgba(43,10,22,.28) 55%, rgba(43,10,22,.1) 100%)}
+.slide.photo.nophoto > .bg::before{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg, rgba(255,255,255,.1) 0 18px, transparent 18px 36px);
+}
+</style>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var rail = document.getElementById('rail');
+  var numEl = document.getElementById('num');
+  var blockEl = document.getElementById('blockName');
+  var progress = document.getElementById('progress');
+  var current = -1;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* біжучий рядок у hero */
+  var cities = ['Хургада','Шарм-ель-Шейх','Марса-Алам','Катовіце','Варшава','Краків','Анталія','Кемер','Стамбул','Крит','Кіпр','Майорка'];
+  var tick = document.getElementById('tick');
+  if(tick){
+    var html = cities.map(function(c){return '<span>'+c+'</span>';}).join('');
+    tick.innerHTML = html + html;
+  }
+
+  /* рейка навігації */
+  slides.forEach(function(s,i){
+    var b = document.createElement('b');
+    b.setAttribute('role','button');
+    b.setAttribute('tabindex','0');
+    b.setAttribute('aria-label','Секція '+(i+1));
+    b.addEventListener('click', function(){ go(i); });
+    b.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();go(i);} });
+    rail.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(rail.children);
+
+  function pad(n){ return (n<10?'0':'')+n; }
+
+  function setActive(i){
+    if(i===current) return;
+    current = i;
+    dots.forEach(function(d,k){ d.classList.toggle('on', k===i); });
+    numEl.textContent = pad(i+1)+' / '+pad(slides.length);
+    blockEl.textContent = slides[i].dataset.block || '';
+    progress.style.width = (i/(slides.length-1)*100)+'%';
+  }
+
+  function go(i){
+    i = Math.max(0, Math.min(slides.length-1, i));
+    slides[i].scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
+  }
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var idx = slides.indexOf(e.target);
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        if(e.intersectionRatio > .55) setActive(idx);
+        stagger(e.target);
+      }
+    });
+  }, {threshold:[.15,.6]});
+  slides.forEach(function(s){ io.observe(s); });
+
+  function stagger(slide){
+    if(slide.dataset.staggered) return;
+    slide.dataset.staggered = '1';
+    slide.querySelectorAll('[data-board] .board-row').forEach(function(r,i){
+      r.style.setProperty('--fd', (0.18 + i*0.055)+'s');
+    });
+    slide.querySelectorAll('tbody tr').forEach(function(r,i){
+      r.style.setProperty('--d', (0.12 + i*0.07)+'s');
+    });
+  }
+
+  document.addEventListener('keydown', function(e){
+    if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    var k = e.key;
+    if(k==='ArrowRight'||k==='ArrowDown'||k==='PageDown'||k===' '){ e.preventDefault(); go(current+1); }
+    else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'){ e.preventDefault(); go(current-1); }
+    else if(k==='Home'){ e.preventDefault(); go(0); }
+    else if(k==='End'){ e.preventDefault(); go(slides.length-1); }
+    else if(e.code==='KeyF'){
+      e.preventDefault();
+      if(!document.fullscreenElement){ document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
+      else { document.exitFullscreen(); }
+    }
+  });
+
+  var hideTimer = setTimeout(function(){ document.body.classList.add('hide-chrome'); }, 9000);
+  ['keydown','wheel','touchstart'].forEach(function(ev){
+    window.addEventListener(ev, function(){
+      clearTimeout(hideTimer);
+      document.body.classList.add('hide-chrome');
+    }, {once:true, passive:true});
+  });
+
+  setActive(0);
+})();
+</script>
+</body>
+</html>
